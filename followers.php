@@ -2,48 +2,60 @@
 require 'includes/db.php';
 include 'includes/header.php';
 
-$user_id = $_SESSION['user_id'] ?? null;
-if (!$user_id) {
+$current_user_id = $_SESSION['user_id'] ?? null;
+$profile_id = $_GET['id'] ?? $current_user_id;
+
+if (!$profile_id) {
     header("Location: login.php");
     exit;
 }
 
-// Remove a follower (they followed you)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_id'])) {
+// Handle remove follower (only if viewing your own profile)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_id']) && $profile_id == $current_user_id) {
     $remove_id = $_POST['remove_id'];
     $delete = $pdo->prepare("DELETE FROM followers WHERE user_id = ? AND follows_id = ?");
-    $delete->execute([$remove_id, $user_id]);
+    $delete->execute([$remove_id, $profile_id]);
     header("Location: followers.php");
     exit;
 }
 
-// Get list of users who follow YOU
+// Get profile user info
+$user_stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$user_stmt->execute([$profile_id]);
+$profile_user = $user_stmt->fetch();
+
+// Get followers of the profile
 $stmt = $pdo->prepare("
     SELECT users.id, users.username, users.profile_image
-    FROM followers 
-    JOIN users ON users.id = followers.user_id 
+    FROM followers
+    JOIN users ON users.id = followers.user_id
     WHERE followers.follows_id = ?
 ");
-$stmt->execute([$user_id]);
+$stmt->execute([$profile_id]);
 $followers = $stmt->fetchAll();
 ?>
 
 <div class="followers-container">
-  <h2>Your Followers</h2>
+  <h2><?= htmlspecialchars($profile_user['username']) ?>'s Followers</h2>
 
-  <?php if (count($followers) === 0): ?>
-    <p>You don't have any followers yet 😢</p>
+  <?php if (empty($followers)): ?>
+    <p>No followers yet.</p>
   <?php else: ?>
     <?php foreach ($followers as $follower): ?>
       <div class="follower-entry">
         <div class="follower-left">
           <img src="uploads/<?= htmlspecialchars($follower['profile_image'] ?? 'default.png') ?>" alt="Profile Image">
-          <span><?= htmlspecialchars($follower['username']) ?></span>
+          <a href="user.php?id=<?= $follower['id'] ?>" class="user-link">
+            <?= htmlspecialchars($follower['username']) ?>
+          </a>
         </div>
-        <form method="POST">
-          <input type="hidden" name="remove_id" value="<?= $follower['id'] ?>">
-          <button type="submit" class="btn remove-btn">Remove</button>
-        </form>
+
+        <?php if ($current_user_id == $profile_id): ?>
+          <form method="POST">
+            <input type="hidden" name="remove_id" value="<?= $follower['id'] ?>">
+            <button type="submit" class="btn remove-btn">Remove</button>
+          </form>
+        <?php endif; ?>
       </div>
     <?php endforeach; ?>
   <?php endif; ?>
