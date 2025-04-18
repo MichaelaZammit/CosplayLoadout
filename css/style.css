@@ -1,0 +1,191 @@
+/* RESET DEFAULT MARGINS AND PADDING */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }  
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    padding: 20px;
+    text-align: center;
+}
+
+input, button {
+    padding: 10px;
+    margin: 10px;
+    width: 250px;
+}
+
+button {
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #444;
+}
+
+/* Basic navbar styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;  /* space out left and right sections */ 
+    align-items: center;             /* vertically center the items */
+    background-color: #333;          /* navbar background (dark gray example) */
+    padding: 0.5em 1em;              /* top/bottom and left/right padding for spacing */
+  }
+  
+  /* Left-aligned nav links */
+  .nav-left a {
+    color: #f2f2f2;                 /* light text color */
+    text-decoration: none;          /* remove underline */
+    padding: 0.5em 0.75em;          /* spacing around each link */
+    font-size: 1em;
+  }
+  .nav-left a:hover {
+    background-color: #575757;      /* on hover, slightly lighter background */
+    color: #fff;
+  }
+  .nav-left a.active {
+    background-color: #04AA6D;      /* example highlight for current page (green) */
+    color: #fff;
+  }
+  
+  /* Right section (search and buttons) */
+  .search-form {
+    display: inline-flex;           /* keep input and button in one line */
+    align-items: center;
+    margin-right: 1em;              /* space between form and the buttons */
+  }
+  .search-input {
+    padding: 0.4em 0.6em;
+    border: 1px solid #ccc;
+    border-radius: 4px;            /* rounded corners for the search box */
+    font-size: 1em;
+  }
+  .search-btn {
+    padding: 0.4em 0.6em;
+    margin-left: 0.3em;            /* space between input and button */
+    font-size: 1em;
+    border: none;
+    border-radius: 4px;            /* rounded corners for button */
+    background-color: #04AA6D;     /* button background color (green example) */
+    color: #fff;
+    cursor: pointer;
+  }
+  .search-btn:hover {
+    background-color: #039a5f;     /* slightly darker on hover */
+  }
+  
+/* FULL-WIDTH NAVBAR */
+.navbar {
+    width: 100%;
+    background-color: #000;
+    color: white;
+    padding: 15px 30px; /* Top/bottom + left/right spacing inside the navbar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* LEFT SIDE (Home, Create, Profile) */
+.nav-left a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.nav-left a:hover {
+    color: #00ffc3;
+}
+
+/* RIGHT SIDE (Search + Auth Buttons) */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.search-input {
+    padding: 6px 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+}
+
+.search-btn {
+    padding: 6px 12px;
+    background-color: #00ffc3;
+    border: none;
+    border-radius: 20px;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.search-btn:hover {
+    background-color: #00d6a8;
+}
+
+/* Login/Register Links */
+.btn {
+    text-decoration: none;
+    background-color: #222;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #444;
+}
+
+
+footer {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #eee;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.post-card {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.post-card:hover {
+    transform: scale(1.03);
+}
+
+.post-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
