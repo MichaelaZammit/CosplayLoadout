@@ -3,14 +3,25 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }  
+  }
 
 body {
     font-family: Arial, sans-serif;
-    background: #f7f7f7;
-    padding: 20px;
-    text-align: center;
+    background-color: #f9f9f9;
+    color: #222;
 }
+
+.page-title {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  
+  .page-title h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #222;
+  }  
 
 input, button {
     padding: 10px;
@@ -111,6 +122,45 @@ button:hover {
     align-items: center;
     gap: 10px;
 }
+
+@media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+    }
+  
+    .nav-left,
+    .nav-right {
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    .nav-left a,
+    .nav-right .btn,
+    .search-form {
+      width: 100%;
+      text-align: left;
+      margin: 5px 0;
+    }
+  
+    .search-form {
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+  
+    .search-input,
+    .search-btn {
+      width: 100%;
+    }
+  
+    .btn {
+      text-align: center;
+    }
+  }
+  
 
 .search-form {
     display: flex;
