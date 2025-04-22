@@ -1,0 +1,153 @@
+.profile-info-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 40px auto 60px;
+    padding: 0 20px;
+  }
+  
+  .profile-image img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #00ffc3;
+  }
+  
+  .profile-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  
+  .meta-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .meta-top h2 {
+    font-size: 1.8rem;
+    margin: 0;
+  }
+  
+  .edit-btn {
+    background-color: #00ffc3;
+    color: black;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+  
+  .edit-btn:hover {
+    background-color: #00d6a8;
+  }
+  
+  .profile-stats {
+    margin: 10px 0;
+    font-size: 0.95rem;
+    color: #555;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .stat-link {
+    text-decoration: none;
+    color: #444;
+    font-weight: bold;
+  }
+  
+  .stat-link:hover {
+    text-decoration: underline;
+  }
+  
+  .profile-bio {
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.5;
+  }
+  
+  .followers-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: left;
+  }
+  
+  .followers-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .follower-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    background: #f9f9f9;
+    padding: 10px 15px;
+    border-radius: 10px;
+  }
+  
+  .follower-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .follower-left img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #00ffc3;
+  }
+  
+  .follower-left span {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  .remove-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  
+  .remove-btn:hover {
+    background-color: #e03d3d;
+  }
+  
+  .follow-btn {
+    background-color: #00ffc3;
+    color: black;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .follow-btn:hover {
+    background-color: #00d6a8;
+  }
+  
+  .user-link {
+    color: #222;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  .user-link:hover {
+    text-decoration: underline;
+  }
+  

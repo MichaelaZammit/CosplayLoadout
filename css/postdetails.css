@@ -1,0 +1,42 @@
+.post-details-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .preview-box {
+    position: relative;
+    width: 200px;
+    height: 350px;
+    margin: 0 auto 20px;
+  }
+  
+  .preview-box img {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    object-fit: contain;
+  }
+  
+  form input[type="text"],
+  form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .btn {
+    padding: 10px 30px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  

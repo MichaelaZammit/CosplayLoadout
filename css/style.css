@@ -675,3 +675,60 @@ form textarea {
   cursor: pointer;
 }
 
+/* Home Page */
+
+/* POST CARD WRAPPER */
+.post-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  max-width: 300px;
+}
+
+/* TOP: USER ICON AND HANDLE SIDE BY SIDE */
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* MAKE ICON SMALL */
+.user-icon {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* HANDLE TEXT */
+.username {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* PREVIEW IMAGE */
+.outfit-preview {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* TITLE UNDER IMAGE */
+.post-title {
+  text-align: center;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 1rem;
+  color: #111;
+}
+
