@@ -6,12 +6,19 @@ session_start();
 <head>
   <meta charset="UTF-8">
   <title>Cosplay Creator</title>
-  <link rel="stylesheet" href="/CosplayLoadout/css/base.css">
-  <link rel="stylesheet" href="/CosplayLoadout/css/navbar.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/cards.css">
+  <link rel="stylesheet" href="/css/creator.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/postdetails.css">
+  <link rel="stylesheet" href="/css/profile.css">
+  <link rel="stylesheet" href="/css/moreinfo.css">
+  <link rel="stylesheet" href="/css/comment.css">
 <?php
 if (isset($pageStyles)) {
     foreach ($pageStyles as $style) {
-        echo "<link rel='stylesheet' href='/CosplayLoadout/css/{$style}.css'>
+        echo "<link rel='stylesheet' href='/css/{$style}.css'>
 ";
     }
 }

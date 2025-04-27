@@ -2,26 +2,32 @@
 require 'includes/db.php';
 include 'includes/header.php';
 
+// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
-$user_id = $_SESSION['user_id'];
+// Determine which user profile to show
+if (isset($_GET['id'])) {
+    $user_id = intval($_GET['id']); // Visiting another user's profile
+} else {
+    $user_id = $_SESSION['user_id']; // Viewing own profile
+}
 
 // Fetch user info
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
-// Get followers and following count
-$followers = $pdo->prepare("SELECT COUNT(*) FROM followers WHERE follows_id = ?");
-$followers->execute([$user_id]);
-$followers_count = $followers->fetchColumn();
+// Get followers and following counts
+$followers_stmt = $pdo->prepare("SELECT COUNT(*) FROM followers WHERE following_id = ?");
+$followers_stmt->execute([$user_id]);
+$followers_count = $followers_stmt->fetchColumn();
 
-$following = $pdo->prepare("SELECT COUNT(*) FROM followers WHERE user_id = ?");
-$following->execute([$user_id]);
-$following_count = $following->fetchColumn();
+$following_stmt = $pdo->prepare("SELECT COUNT(*) FROM followers WHERE follower_id = ?");
+$following_stmt->execute([$user_id]);
+$following_count = $following_stmt->fetchColumn();
 
 // Fetch user's posts
 $post_stmt = $pdo->prepare("SELECT * FROM posts WHERE user_id = ? ORDER BY created_at DESC");
@@ -40,27 +46,31 @@ $posts = $post_stmt->fetchAll();
   <div class="profile-meta">
     <div class="meta-top">
       <h2><?= htmlspecialchars($user['username']) ?></h2>
-      <a href="edit_profile.php" class="edit-btn">Edit</a>
+
+      <!-- Only show Edit button if it's YOUR profile -->
+      <?php if ($user['id'] == $_SESSION['user_id']): ?>
+        <a href="edit_profile.php" class="edit-btn">Edit</a>
+      <?php endif; ?>
     </div>
 
     <div class="profile-stats">
-      <a href="following.php" class="stat-link"><strong><?= $following_count ?></strong> Following</a>
-      <a href="followers.php" class="stat-link"><strong><?= $followers_count ?></strong> Followers</a>
+      <span><strong><?= $following_count ?></strong> Following</span>
+      <span><strong><?= $followers_count ?></strong> Followers</span>
     </div>
 
     <p class="profile-bio"><?= nl2br(htmlspecialchars($user['bio'] ?? '')) ?></p>
   </div>
 </div>
 
-<!-- Posts Section -->
+<!-- User's Posts Section -->
 <div class="page-title">
-  <h2>Your Creations</h2>
+  <h2><?= ($user['id'] == $_SESSION['user_id']) ? "Your Creations" : $user['username'] . "'s Creations" ?></h2>
 </div>
 
 <div class="grid-container">
   <?php foreach ($posts as $post): ?>
     <div class="post-card">
-      <a href="view.php?id=<?= $post['id']; ?>">
+      <a href="moreinfo.php?id=<?= $post['id']; ?>">
         <img src="uploads/<?= htmlspecialchars($post['image']); ?>" alt="Outfit">
       </a>
     </div>

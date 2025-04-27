@@ -1,1 +1,30 @@
-body { font-family: Arial, sans-serif; background: #f9f9f9; margin: 0; color: #111; }
+body { 
+    font-family: Arial, sans-serif; 
+    background: #f9f9f9; 
+    margin: 0; 
+    color: #111; 
+}
+
+/* Make the whole card clickable nicely */
+.post-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Add hover effect to cards */
+.post-card:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer; /* makes the mouse a pointer */
+}
+
+.footer-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+  }
+  

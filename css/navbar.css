@@ -1,11 +1,14 @@
-
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #000;
+  background-color: pink;
   padding: 15px 30px;
+  position: sticky;
+  top: 0; /* This is what makes it actually stick */
+  z-index: 999; /* So it stays above other content */
 }
+
 .nav-left a, .btn {
   color: white;
   text-decoration: none;
