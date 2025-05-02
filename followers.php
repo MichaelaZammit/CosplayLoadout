@@ -13,9 +13,9 @@ if (!$profile_id) {
 // Handle remove follower (only if viewing your own profile)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_id']) && $profile_id == $current_user_id) {
     $remove_id = $_POST['remove_id'];
-    $delete = $pdo->prepare("DELETE FROM followers WHERE user_id = ? AND follows_id = ?");
+    $delete = $pdo->prepare("DELETE FROM followers WHERE follower_id = ? AND following_id = ?");
     $delete->execute([$remove_id, $profile_id]);
-    header("Location: followers.php");
+    header("Location: followers.php?id=" . $profile_id);
     exit;
 }
 
@@ -28,8 +28,8 @@ $profile_user = $user_stmt->fetch();
 $stmt = $pdo->prepare("
     SELECT users.id, users.username, users.profile_image
     FROM followers
-    JOIN users ON users.id = followers.user_id
-    WHERE followers.follows_id = ?
+    JOIN users ON users.id = followers.follower_id
+    WHERE followers.following_id = ?
 ");
 $stmt->execute([$profile_id]);
 $followers = $stmt->fetchAll();

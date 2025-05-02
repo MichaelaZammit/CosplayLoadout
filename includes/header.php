@@ -1,6 +1,3 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,13 +15,13 @@ session_start();
 <?php
 if (isset($pageStyles)) {
     foreach ($pageStyles as $style) {
-        echo "<link rel='stylesheet' href='/css/{$style}.css'>
-";
+        echo "<link rel='stylesheet' href='/css/{$style}.css'>\n";
     }
 }
 ?>
 </head>
 <body>
+
 <nav class="navbar">
   <div class="nav-left">
     <a href="index.php">Home</a>
@@ -36,8 +33,15 @@ if (isset($pageStyles)) {
       <input type="text" name="q" class="search-input" placeholder="Search...">
       <button type="submit" class="search-btn">Search</button>
     </form>
-    <a href="login.php" class="btn">Login</a>
-    <a href="register.php" class="btn">Register</a>
+
+    <?php if (isset($_SESSION['user_id'])): ?>
+      <a href="logout.php" class="btn logout-btn">Logout</a>
+    <?php else: ?>
+      <a href="login.php" class="btn">Login</a>
+      <a href="register.php" class="btn">Register</a>
+    <?php endif; ?>
+    
   </div>
 </nav>
+
 <main>

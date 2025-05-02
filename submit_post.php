@@ -1,12 +1,12 @@
 <?php
 require 'includes/db.php';
+ini_set('memory_limit', '512M');
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_SESSION['user_id'];
     $title = $_POST['title'] ?? '';
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $shoes = $_POST['shoes'] ?? '';
 
     // Generate image name
-    $image_name = $top . $pants . $shoes . $gender . time() . '.png';
+    $image_name = $top . $gender . '_' . $pants . $gender . '_' . $shoes . $gender . '.png';
     $output_path = 'uploads/' . $image_name;
 
     // Create base image
@@ -32,11 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $path = 'assets/clothes/' . $part . $gender . '.png';
             if (file_exists($path)) {
                 $layer = imagecreatefrompng($path);
-                imagecopy($base, $layer, 0, 0, 0, 0, imagesx($layer), imagesy($layer));
+                $layer_resized = imagescale($layer, 300, 300);
+                imagecopy($base, $layer_resized, 0, 0, 0, 0, imagesx($layer_resized), imagesy($layer_resized));
+                imagedestroy($layer_resized);
                 imagedestroy($layer);
             }
         }
     }
+    
 
     // Save image
     imagepng($base, $output_path);

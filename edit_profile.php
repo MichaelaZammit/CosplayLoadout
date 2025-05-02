@@ -1,11 +1,14 @@
 <?php
+session_start();
 require 'includes/db.php';
-include 'includes/header.php';
 
+// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
+
+include 'includes/header.php'; // Now safe
 
 $user_id = $_SESSION['user_id'];
 
@@ -39,18 +42,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<div class="edit-profile-container">
-  <h2>Edit Profile</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile - Cosplay Creator</title>
+    <link rel="stylesheet" href="css/edit_profile.css">
+</head>
+<body>
 
-  <form method="POST" enctype="multipart/form-data">
-    <label for="profile_image">Profile Image:</label><br>
-    <input type="file" name="profile_image" accept="image/*"><br><br>
+<div class="edit-profile-wrapper">
+  <div class="edit-profile-card">
+    <h2>Edit Your Profile</h2>
 
-    <label for="bio">Bio:</label><br>
-    <textarea name="bio" rows="5" cols="50"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea><br><br>
+    <form method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="profile_image">Profile Image:</label>
+        <input type="file" name="profile_image" accept="image/*">
+      </div>
 
-    <button type="submit" class="btn">Save Changes</button>
-  </form>
+      <div class="form-group">
+        <label for="bio">Bio:</label>
+        <textarea name="bio" rows="6" placeholder="Write something about yourself..."><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+      </div>
+
+      <button type="submit" class="save-button">Save Changes</button>
+    </form>
+  </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>
+
+</body>
+</html>

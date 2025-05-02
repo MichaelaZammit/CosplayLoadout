@@ -16,16 +16,16 @@ $stmt->execute([$post_id]);
 $original_post = $stmt->fetch();
 
 if ($original_post) {
-    // Insert reposted post
     $stmt = $pdo->prepare("
-        INSERT INTO posts (user_id, image, title, description, created_at)
-        VALUES (?, ?, ?, ?, NOW())
+        INSERT INTO posts (user_id, image, title, description, repost_of, created_at)
+        VALUES (?, ?, ?, ?, ?, NOW())
     ");
     $stmt->execute([
         $current_user_id,
         $original_post['image'],
         'Repost: ' . $original_post['title'],
-        $original_post['description']
+        $original_post['description'],
+        $post_id
     ]);
 }
 

@@ -1,88 +1,134 @@
+/* Main Layout - Wrapper and Card */
+.create-page-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.create-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  max-width: 1200px;
+  width: 100%;
+}
+
 .creator-layout {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 60px;
-    padding: 40px;
-    max-width: 1200px;
-    margin: auto;
-  }
-  
-  .character-preview {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .preview-box {
-    position: relative;
-    width: 300px;
-    height: 500px;
-  }
-  
-  .preview-box img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    object-fit: contain;
-  }
-  
-  .clothing-options {
-    flex: 1;
-    max-width: 400px;
-  }
-  
-  .form-section {
-    margin-bottom: 30px;
-  }
-  
-  .section-label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 8px;
-  }
-  
-  .option-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .image-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  .image-option input[type="radio"] {
-    display: none;
-  }
-  
-  .image-option img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-    border-radius: 8px;
-    border: 2px solid transparent;
-    transition: border-color 0.2s;
-  }
-  
-  .image-option input[type="radio"]:checked + img {
-    border-color: #000;
-  }
-  
-  .button-row {
-    margin-top: 20px;
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    background: black;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-  
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+/* Character Preview (Left Side) */
+.character-preview {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.preview-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  width: 400px; /* <<< increased from 360px to 400px */
+  height: 600px; /* <<< added fixed height */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* <<< center vertically too */
+}
+
+.preview-box {
+  position: relative;
+  width: 350px; /* <<< increased size */
+  height: 580px; /* <<< increased size */
+}
+
+.preview-box img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* <<< force height too */
+  object-fit: contain;
+}
+
+
+/* Clothing Options (Right Side) */
+.clothing-options {
+  flex: 1;
+}
+
+.creator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-section {
+  margin-bottom: 20px;
+}
+
+.section-label {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* Clothes Thumbnails */
+.option-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.image-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.image-option input[type="radio"] {
+  display: none; /* Hide the radio button */
+}
+
+.image-option img {
+  width: 90px;    /* BIGGER thumbnails */
+  height: 90px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  object-fit: contain;
+  transition: border-color 0.3s, background-color 0.3s;
+  cursor: pointer;
+}
+
+.image-option input[type="radio"]:checked + img {
+  border-color: #000; /* Black border when selected */
+}
+
+.image-option img:hover {
+  background: #f0f0f0;
+}
+
+/* Submit Button */
+.submit-button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #218838;
+}

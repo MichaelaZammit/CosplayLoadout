@@ -1,48 +1,61 @@
 <?php
-require 'includes/db.php';
 include 'includes/header.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
-
-if (!isset($_POST['gender'], $_POST['top'], $_POST['pants'], $_POST['shoes'])) {
-    echo "<p>Missing data. Please go back and select a character and clothing items.</p>";
-    include 'includes/footer.php';
-    exit;
-}
-
-$gender = $_POST['gender'];
-$top = $_POST['top'];
-$pants = $_POST['pants'];
-$shoes = $_POST['shoes'];
+// Receiving clothes data
+$gender = $_POST['gender'] ?? 'f';
+$top = $_POST['top'] ?? null;
+$pants = $_POST['pants'] ?? null;
+$shoes = $_POST['shoes'] ?? null;
 ?>
 
-<div class="post-details-container">
-  <h2>Finish Your Creation</h2>
+<div class="create-page-wrapper">
+  <div class="create-card">
+    <div class="creator-layout">
 
-  <form action="submit_post.php" method="POST">
-    <div class="preview-box">
-      <img src="assets/<?= $gender === 'f' ? 'female_base.png' : 'male_base.png' ?>" alt="Base Character">
-      <img src="assets/clothes/<?= $top . $gender ?>.png" alt="Top">
-      <img src="assets/clothes/<?= $pants . $gender ?>.png" alt="Pants">
-      <img src="assets/clothes/<?= $shoes . $gender ?>.png" alt="Shoes">
+      <!-- Character Preview -->
+      <div class="character-preview">
+        <div class="preview-card">
+          <div class="preview-box">
+            <img src="assets/<?= $gender === 'f' ? 'female_base.png' : 'male_base.png' ?>" alt="Base Character">
+            <?php if ($top): ?>
+              <img src="assets/clothes/<?= $top . $gender ?>.png" alt="Top">
+            <?php endif; ?>
+            <?php if ($pants): ?>
+              <img src="assets/clothes/<?= $pants . $gender ?>.png" alt="Pants">
+            <?php endif; ?>
+            <?php if ($shoes): ?>
+              <img src="assets/clothes/<?= $shoes . $gender ?>.png" alt="Shoes">
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form for Title, Description and Submit -->
+      <div class="finish-form">
+        <form action="submit_post.php" method="POST" class="creator-form">
+
+          <div class="input-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" placeholder="Name your outfit..." required>
+          </div>
+
+          <div class="input-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" placeholder="Describe your outfit..." required></textarea>
+          </div>
+
+          <!-- Hidden clothes info to submit -->
+          <input type="hidden" name="gender" value="<?= $gender ?>">
+          <input type="hidden" name="top" value="<?= $top ?>">
+          <input type="hidden" name="pants" value="<?= $pants ?>">
+          <input type="hidden" name="shoes" value="<?= $shoes ?>">
+
+          <button type="submit" class="submit-button">Post Outfit</button>
+        </form>
+      </div>
+
     </div>
-
-    <label for="title">Title:</label>
-    <input type="text" name="title" id="title" required>
-
-    <label for="description">Description:</label>
-    <textarea name="description" id="description" rows="5" placeholder="Describe your outfit..."></textarea>
-
-    <input type="hidden" name="gender" value="<?= htmlspecialchars($gender) ?>">
-    <input type="hidden" name="top" value="<?= htmlspecialchars($top) ?>">
-    <input type="hidden" name="pants" value="<?= htmlspecialchars($pants) ?>">
-    <input type="hidden" name="shoes" value="<?= htmlspecialchars($shoes) ?>">
-
-    <button type="submit" class="btn">Post Outfit</button>
-  </form>
+  </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>

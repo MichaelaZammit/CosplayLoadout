@@ -1,6 +1,8 @@
 <?php
+session_start();
 require 'includes/db.php';
 include 'includes/header.php';
+
 
 $query = $_GET['q'] ?? '';
 $search = "%$query%";

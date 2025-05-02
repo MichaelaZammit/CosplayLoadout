@@ -2,6 +2,8 @@
 session_start();
 require 'includes/db.php';
 
+$error = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email    = trim($_POST['email']);
     $password = $_POST['password'];
@@ -12,6 +14,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
+
+        // Remember me: create a cookie
+        if (isset($_POST['remember'])) {
+            setcookie('user_id', $user['id'], time() + (86400 * 30), "/"); // 30 days
+        }
+
         header("Location: profile.php");
         exit;
     } else {
@@ -21,18 +29,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <title>Login - Cosplay Creator</title>
+    <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
+
+<div class="auth-wrapper">
+  <div class="auth-page-wrapper">
     <h2>Login</h2>
+
+    <?php if (!empty($error)): ?>
+      <div class="error-message">
+        <?= htmlspecialchars($error) ?>
+      </div>
+    <?php endif; ?>
+
     <form method="POST" action="login.php">
-        <input type="email" name="email" placeholder="Email" required><br>
-        <input type="password" name="password" placeholder="Password" required><br>
-        <button type="submit">Login</button>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+
+      <div class="remember-me">
+        <label>
+          <input type="checkbox" name="remember">
+          Remember Me
+        </label>
+      </div>
+
+      <button type="submit">Login</button>
     </form>
-    <?php if (!empty($error)) echo "<p>$error</p>"; ?>
+
+    <div class="extra-link">
+      Don't have an account? <a href="register.php">Register here</a>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

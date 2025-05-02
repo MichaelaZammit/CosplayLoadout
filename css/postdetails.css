@@ -1,62 +1,126 @@
+/* Comments Section   */
 .post-comments {
-  margin-top: 20px;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .post-comments h2 {
   font-size: 24px;
-  margin-bottom: 15px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .comment {
-  background: #f1f1f1;
-  padding: 12px 18px;
-  margin-bottom: 10px;
+  background: #f9f9f9;
+  padding: 15px 20px;
   border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.05);
   max-width: 600px;
+  width: 100%;
   word-wrap: break-word;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
 }
 
 .comment strong {
-  display: block;
   font-size: 16px;
   color: #333;
   margin-bottom: 5px;
+  display: block;
 }
 
 .comment p {
-  margin: 0;
   font-size: 14px;
   color: #555;
+  margin: 0;
 }
 
-/* Style the comment form */
+/* Comment Form */
 .post-comments form {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
 }
 
 .post-comments textarea {
-  padding: 10px;
-  border-radius: 8px;
+  padding: 12px;
   border: 1px solid #ccc;
-  resize: vertical;
-  min-height: 80px;
+  border-radius: 8px;
   font-size: 14px;
-  margin-bottom: 10px;
+  resize: vertical;
+  min-height: 100px;
 }
 
 .post-comments button {
-  padding: 10px;
+  padding: 12px;
   background-color: #007BFF;
   color: white;
+  font-size: 16px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  transition: background-color 0.3s;
 }
 
 .post-comments button:hover {
   background-color: #0056b3;
 }
+
+/* Finish Form Section */
+.finish-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* stack the form inputs vertically */
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Group inputs */
+.input-group {
+  width: 100%;
+  max-width: 400px; /* bigger inputs */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Input and textarea styling */
+.creator-form input[type="text"],
+.creator-form textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+/* Make textarea taller */
+.creator-form textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* Button */
+.submit-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 14px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.submit-button:hover {
+  background-color: #218838;
+}
+
