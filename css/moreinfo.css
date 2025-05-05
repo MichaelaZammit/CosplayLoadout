@@ -18,14 +18,14 @@
   background: white;
   border-radius: 16px;
   padding: 40px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px #89A8B2;
 }
 
 /* Image */
 .post-image img {
   width: 400px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px #89A8B2;
 }
 
 /* Details */
@@ -46,12 +46,12 @@
 .follow-button,
 .like-button,
 .repost-button {
-  background: white;
+  background: #F1F0E8;
   border: 1px solid #ddd;
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 14px;
-  color: #333;
+  color: #B3C8CF;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -60,13 +60,13 @@
 .follow-button:hover,
 .like-button:hover,
 .repost-button:hover {
-  background: #f0f0f0;
+  background: #F1F0E8;
 }
 
 /* Follow when following */
 .follow-button.following {
-  background-color: #28a745;
-  color: white;
+  background-color: #B3C8CF;
+  color: #F1F0E8;
   border: none;
 }
 
@@ -84,7 +84,7 @@
 
 .likes-count {
   font-size: 14px;
-  color: #777;
+  color: #E5E1DA;
 }
 
 /* Post Meta */
@@ -95,13 +95,13 @@
 
 .description {
   font-size: 16px;
-  color: #555;
+  color: #B3C8CF;
   margin-bottom: 15px;
 }
 
 .post-meta {
   font-size: 14px;
-  color: #999;
+  color: #E5E1DA;
 }
 
 /* Comments Section */
@@ -113,14 +113,14 @@
 }
 
 .comments-section {
-  background: white;
+  background: #F1F0E8;
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .comment {
-  background: #f8f8f8;
+  background: #F1F0E8;
   padding: 10px 15px;
   border-radius: 8px;
   margin-bottom: 15px;
@@ -130,7 +130,7 @@
   margin: 20px 0;
   border: none;
   height: 1px;
-  background-color: #e0e0e0;
+  background-color: #F1F0E8;
 }
 
 /* Comment Form */
@@ -144,15 +144,15 @@
   width: 100%;
   min-height: 80px;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid #E5E1DA;
   border-radius: 8px;
   font-size: 16px;
 }
 
 .comment-form button {
   padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
+  background-color: #B3C8CF;
+  color: #F1F0E8;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -160,5 +160,5 @@
 }
 
 .comment-form button:hover {
-  background-color: #218838;
+  background-color: #B3C8CF;
 }

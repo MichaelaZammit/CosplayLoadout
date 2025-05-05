@@ -1,246 +1,263 @@
+/* ---------- Profile Header ---------- */
 .profile-info-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 30px;
-    max-width: 1000px;
-    margin: 40px auto 60px;
-    padding: 0 20px;
-  }
-  
-  .profile-image img {
-    width: 140px;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid #00ffc3;
-  }
-  
-  .profile-meta {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  
-  .meta-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  
-  .meta-top h2 {
-    font-size: 1.8rem;
-    margin: 0;
-  }
-  
-  .edit-btn {
-    background-color: #00ffc3;
-    color: black;
-    padding: 6px 12px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: bold;
-  }
-  
-  .edit-btn:hover {
-    background-color: #00d6a8;
-  }
-  
-  .profile-stats {
-    margin: 10px 0;
-    font-size: 0.95rem;
-    color: #555;
-    display: flex;
-    gap: 20px;
-  }
-  
-  .stat-link {
-    text-decoration: none;
-    color: #444;
-    font-weight: bold;
-  }
-  
-  .stat-link:hover {
-    text-decoration: underline;
-  }
-  
-  .profile-bio {
-    font-size: 0.95rem;
-    color: #333;
-    line-height: 1.5;
-  }
-  
-  .followers-container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    text-align: left;
-  }
-  
-  .followers-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .follower-entry {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    background: #f9f9f9;
-    padding: 10px 15px;
-    border-radius: 10px;
-  }
-  
-  .follower-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .follower-left img {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid #00ffc3;
-  }
-  
-  .follower-left span {
-    font-weight: bold;
-    font-size: 1rem;
-  }
-  
-  .remove-btn {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    cursor: pointer;
-  }
-  
-  .remove-btn:hover {
-    background-color: #e03d3d;
-  }
-  
-  .follow-btn {
-    background-color: #00ffc3;
-    color: black;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .follow-btn:hover {
-    background-color: #00d6a8;
-  }
-  
-  .user-link {
-    color: #222;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-  }
-  
-  .user-link:hover {
-    text-decoration: underline;
-  }
-  
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  } 
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 40px auto 60px;
+  padding: 0 20px;
+}
 
-  .outfit-box {
-    width: 250px;
-    height: 400px;
-    background-color: #bfbfbf;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  .outfit-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }  
+.profile-image img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #89A8B2;
+}
 
-  .page-title {
-    text-align: center;
-    margin: 60px 0 30px 0;
-    font-size: 2rem;
-    font-weight: bold;
-  }
-  
-  /* Add extra margin for Reposts title */
-  .page-title + .home-container {
-    margin-top: 30px;
-  }
-  
-  /* (Optional) make grid-container always have consistent spacing */
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
+.profile-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-  .post-card {
-    width: 100%;
-    height: 450px; /* <- fix a height for all cards */
-    background: #d1d1d1;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.3s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .post-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .outfit-preview {
-    width: 100%;
-    height: 320px;
-    object-fit: contain;
-  }  
+.meta-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 
-  .character-container {
-    position: relative;
-    width: 300px;
-    height: 300px;
-    margin: 0 auto;
-  }
-  
-  .layer {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    object-fit: contain;
-    z-index: 1;
-  }
-  
-  .layer.base {
-    z-index: 0;
-  }  
-  
+.meta-top h2 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.edit-btn {
+  background-color: #89A8B2;
+  color: black;
+  padding: 6px 12px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.edit-btn:hover {
+  background-color: #89A8B2;
+}
+
+.profile-stats {
+  margin: 10px 0;
+  font-size: 0.95rem;
+  color: #555;
+  display: flex;
+  gap: 20px;
+}
+
+.stat-link {
+  text-decoration: none;
+  color: #B3C8CF;
+  font-weight: bold;
+}
+
+.stat-link:hover {
+  text-decoration: underline;
+}
+
+.profile-bio {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* ---------- Followers Section ---------- */
+.followers-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: left;
+}
+
+.followers-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.follower-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  background: #F1F0E8;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+
+.follower-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.follower-left img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #89A8B2;
+}
+
+.follower-left span {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.remove-btn {
+  background-color: #ff4d4d;
+  color: #F1F0E8;
+  border: none;
+  border-radius: 15px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background-color: #e03d3d;
+}
+
+.follow-btn {
+  background-color: #89A8B2;
+  color: black;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.follow-btn:hover {
+  background-color: #779BA6;
+}
+
+.user-link {
+  color: #89A8B2;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.user-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Grid Layout ---------- */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---------- FLATTEN all post cards ---------- */
+.grid-container > div,
+.post-wrapper,
+.post-card,
+.character-container {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* ---------- Character Display ---------- */
+.character-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 370px;
+  padding-top: 20px;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.character-container img {
+  max-height: 100%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+/* ---------- Titles ---------- */
+.page-title {
+  text-align: center;
+  margin: 60px 0 30px 0;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.page-title + .home-container {
+  margin-top: 30px;
+}
+
+/* ---------- Delete / Edit Buttons ---------- */
+.post-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.delete-form {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+.delete-inline-form {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  margin: 0;
+  z-index: 2;
+}
+
+.delete-inline-btn {
+  background-color: #89A8B2;
+  color: black;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.delete-inline-btn:hover {
+  background-color: #779BA6;
+}
+
+.delete-checkbox {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  transform: scale(1.3);
+  z-index: 2;
+}

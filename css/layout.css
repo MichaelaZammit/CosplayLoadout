@@ -3,4 +3,59 @@
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 30px;
   }
+
+  .page-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+  
+  .post-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 60px;
+  }
+  
+  .post-image img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px #89A8B2;
+  }
+  
+  .post-info {
+    flex: 1;
+    min-width: 300px;
+    max-width: 600px;
+  }
+  
+  .post-info h2 {
+    margin-top: 10px;
+    font-size: 24px;
+  }
+  
+  .post-info .description {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #89A8B2;
+  }
+  
+  .post-meta {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #B3C8CF;
+  }
+  
+  .user-link {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  .user-link:hover {
+    text-decoration: underline;
+  }
+  
   

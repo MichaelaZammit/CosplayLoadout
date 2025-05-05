@@ -8,10 +8,10 @@
   
   /* Card */
   .edit-profile-card {
-    background: white;
+    background: #F1F0E8;
     padding: 30px;
     border-radius: 16px;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 8px 20px #89A8B2;
     width: 100%;
     max-width: 500px;
     text-align: center;
@@ -47,15 +47,15 @@
     width: 100%;
     padding: 10px;
     font-size: 15px;
-    border: 1px solid #ccc;
+    border: 1px solid #E5E1DA;
     border-radius: 8px;
   }
   
   /* Save Button */
   .save-button {
     padding: 12px 20px;
-    background-color: #28a745;
-    color: white;
+    background-color: #89A8B2;
+    color: #F1F0E8;
     font-size: 16px;
     border: none;
     border-radius: 8px;
@@ -64,6 +64,6 @@
   }
   
   .save-button:hover {
-    background-color: #218838;
+    background-color: #779BA6;
   }
   

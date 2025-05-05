@@ -1,7 +1,7 @@
 .home-container {
-  max-width: 1200px; /* wider to fit more cards nicely */
-  margin: 60px auto; /* more margin top & bottom */
-  padding: 0 30px; /* a bit more breathing space */
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 30px;
 }
 
 .page-title {
@@ -14,45 +14,62 @@
 .grid-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  row-gap: 60px; /* 🔥 this is the big vertical gap between rows */
-  column-gap: 30px; /* horizontal space between cards */
+  row-gap: 40px;
+  column-gap: 30px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
 .post-card {
-  background: rgb(185, 185, 185);
-  padding: 10px 10px 20px 10px;
+  background: #E5E1DA;
+  padding: 20px 10px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px #89A8B2;
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 500px; /* 🔥 fix the card height */
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 
 .post-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 20px #779BA6;
 }
 
-.user-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+.post-header {
+  font-size: 0.95rem;
+  font-weight: bold;
+  margin-bottom: 12px;
 }
 
-.outfit-preview {
-  width: 100%;
+.username {
+  display: block;
+  color: #28393E;
+}
+
+.character-container {
+  position: relative;
+  width: 180px;
   height: 300px;
+  margin-bottom: 10px;
+}
+
+.character-container .layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  border-radius: 10px;
 }
 
 .post-title {
-  margin-top: 10px;
   font-size: 1rem;
   font-weight: bold;
+  margin-top: 10px;
+  color: #28393E;
 }

@@ -13,10 +13,10 @@
 }
 
 .comment {
-  background: #f9f9f9;
+  background: #F1F0E8;
   padding: 15px 20px;
   border-radius: 12px;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0px 4px 10px #89A8B2;
   max-width: 600px;
   width: 100%;
   word-wrap: break-word;
@@ -25,14 +25,14 @@
 
 .comment strong {
   font-size: 16px;
-  color: #333;
+  color: #89A8B2;
   margin-bottom: 5px;
   display: block;
 }
 
 .comment p {
   font-size: 14px;
-  color: #555;
+  color: #B3C8CF;
   margin: 0;
 }
 
@@ -48,7 +48,7 @@
 
 .post-comments textarea {
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid #E5E1DA;
   border-radius: 8px;
   font-size: 14px;
   resize: vertical;
@@ -57,8 +57,8 @@
 
 .post-comments button {
   padding: 12px;
-  background-color: #007BFF;
-  color: white;
+  background-color: #89A8B2;
+  color: #F1F0E8;
   font-size: 16px;
   border: none;
   border-radius: 8px;
@@ -67,7 +67,7 @@
 }
 
 .post-comments button:hover {
-  background-color: #0056b3;
+  background-color: #89A8B2;
 }
 
 /* Finish Form Section */
@@ -95,7 +95,7 @@
 .creator-form textarea {
   width: 100%;
   padding: 14px;
-  border: 1px solid #ccc;
+  border: 1px solid #E5E1DA;
   border-radius: 8px;
   font-size: 16px;
 }
@@ -111,8 +111,8 @@
   width: 100%;
   max-width: 400px;
   padding: 14px;
-  background-color: #28a745;
-  color: white;
+  background-color: #B3C8CF;
+  color: #F1F0E8;
   border: none;
   border-radius: 8px;
   font-size: 18px;
@@ -121,6 +121,6 @@
 }
 
 .submit-button:hover {
-  background-color: #218838;
+  background-color: #B3C8CF;
 }
 

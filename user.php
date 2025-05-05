@@ -1,4 +1,5 @@
 <?php
+session_start();
 require 'includes/db.php';
 include 'includes/header.php';
 
@@ -27,17 +28,17 @@ if (!$user) {
 }
 
 // Count followers
-$follower_stmt = $pdo->prepare("SELECT COUNT(*) FROM followers WHERE follows_id = ?");
+$follower_stmt = $pdo->prepare("SELECT COUNT(*) FROM followers WHERE following_id = ?");
 $follower_stmt->execute([$profile_id]);
 $follower_count = $follower_stmt->fetchColumn();
 
 // Count following
-$following_stmt = $pdo->prepare("SELECT COUNT(*) FROM followers WHERE user_id = ?");
+$following_stmt = $pdo->prepare("SELECT COUNT(*) FROM followers WHERE follower_id = ?");
 $following_stmt->execute([$profile_id]);
 $following_count = $following_stmt->fetchColumn();
 
 // Check if viewer is already following this user
-$check_follow = $pdo->prepare("SELECT * FROM followers WHERE user_id = ? AND follows_id = ?");
+$check_follow = $pdo->prepare("SELECT * FROM followers WHERE follower_id = ? AND following_id = ?");
 $check_follow->execute([$viewer_id, $profile_id]);
 $is_following = $check_follow->rowCount() > 0;
 
@@ -45,7 +46,7 @@ $is_following = $check_follow->rowCount() > 0;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['follow_id']) && $_POST['follow_id'] != $viewer_id) {
         if (!$is_following) {
-            $follow = $pdo->prepare("INSERT INTO followers (user_id, follows_id) VALUES (?, ?)");
+            $follow = $pdo->prepare("INSERT INTO followers (follower_id, following_id) VALUES (?, ?)");
             $follow->execute([$viewer_id, $profile_id]);
             header("Location: user.php?id=$profile_id");
             exit;
@@ -53,17 +54,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_POST['unfollow_id']) && $_POST['unfollow_id'] != $viewer_id) {
-        $unfollow = $pdo->prepare("DELETE FROM followers WHERE user_id = ? AND follows_id = ?");
+        $unfollow = $pdo->prepare("DELETE FROM followers WHERE follower_id = ? AND following_id = ?");
         $unfollow->execute([$viewer_id, $profile_id]);
         header("Location: user.php?id=$profile_id");
         exit;
     }
 }
 
-// Get posts from this user
-$post_stmt = $pdo->prepare("SELECT * FROM posts WHERE user_id = ? ORDER BY created_at DESC");
+// Get posts from this user and include user data
+$post_stmt = $pdo->prepare("
+  SELECT posts.*, users.username, users.profile_image 
+  FROM posts 
+  JOIN users ON posts.user_id = users.id 
+  WHERE posts.user_id = ? AND posts.repost_of IS NULL 
+  ORDER BY posts.created_at DESC
+");
 $post_stmt->execute([$profile_id]);
 $posts = $post_stmt->fetchAll();
+
 ?>
 
 <!-- Profile Header -->
@@ -106,11 +114,42 @@ $posts = $post_stmt->fetchAll();
 
 <div class="grid-container">
   <?php foreach ($posts as $post): ?>
-    <div class="post-card">
-      <a href="view.php?id=<?= $post['id']; ?>">
-        <img src="uploads/<?= htmlspecialchars($post['image']); ?>" alt="Outfit">
-      </a>
-    </div>
+    <?php
+      $image = $post['image'] ?? '';
+      $gender = str_contains($image, 'm') ? 'male' : 'female';
+      $baseImage = ($gender === 'male') ? 'male_base.png' : 'female_base.png';
+
+      preg_match('/top\d+/', $image, $topMatch);
+      preg_match('/pants\d+/', $image, $bottomMatch);
+      preg_match('/shoes\d+/', $image, $shoesMatch);
+
+      $topFile = isset($topMatch[0]) ? $topMatch[0] . ($gender === 'male' ? 'm' : 'f') : '';
+      $bottomFile = isset($bottomMatch[0]) ? $bottomMatch[0] . ($gender === 'male' ? 'm' : 'f') : '';
+      $shoesFile = isset($shoesMatch[0]) ? $shoesMatch[0] . ($gender === 'male' ? 'm' : 'f') : '';
+    ?>
+    <a href="moreinfo.php?id=<?= $post['id']; ?>" class="post-link">
+      <div class="post-card">
+        <div class="post-header">
+          <img src="uploads/<?= htmlspecialchars($post['profile_image'] ?? 'default.png') ?>" alt="User Icon" class="user-icon">
+          <span class="username">@<?= htmlspecialchars($post['username']) ?></span>
+        </div>
+
+        <div class="character-container">
+          <img src="Assets/<?= $baseImage ?>" class="layer base" alt="Base">
+          <?php if (!empty($topFile)): ?>
+            <img src="Assets/clothes/<?= $topFile ?>.png" class="layer top" alt="Top">
+          <?php endif; ?>
+          <?php if (!empty($bottomFile)): ?>
+            <img src="Assets/clothes/<?= $bottomFile ?>.png" class="layer bottom" alt="Bottom">
+          <?php endif; ?>
+          <?php if (!empty($shoesFile)): ?>
+            <img src="Assets/clothes/<?= $shoesFile ?>.png" class="layer shoes" alt="Shoes">
+          <?php endif; ?>
+        </div>
+
+        <h3 class="post-title"><?= htmlspecialchars($post['title']) ?></h3>
+      </div>
+    </a>
   <?php endforeach; ?>
 </div>
 

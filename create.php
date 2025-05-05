@@ -1,131 +1,161 @@
-<?php
-include 'includes/header.php';
+<?php include 'includes/header.php'; ?>
 
-// Set defaults
-$gender = $_POST['gender'] ?? 'f';
-$top = $_POST['top'] ?? null;
-$pants = $_POST['pants'] ?? null;
-$shoes = $_POST['shoes'] ?? null;
-?>
-
-<!-- Full Create Page -->
 <div class="create-page-wrapper">
   <div class="create-card">
-
     <div class="creator-layout">
-      
+
       <!-- Character Preview -->
       <div class="character-preview">
         <div class="preview-card">
           <div class="preview-box">
-            <img src="assets/<?= $gender === 'f' ? 'female_base.png' : 'male_base.png' ?>" alt="Base Character" class="character-layer">
-            <?php if ($top): ?>
-              <img src="assets/clothes/<?= $top . $gender ?>.png" alt="Top" class="character-layer">
-            <?php endif; ?>
-            <?php if ($pants): ?>
-              <img src="assets/clothes/<?= $pants . $gender ?>.png" alt="Pants" class="character-layer">
-            <?php endif; ?>
-            <?php if ($shoes): ?>
-              <img src="assets/clothes/<?= $shoes . $gender ?>.png" alt="Shoes" class="character-layer">
-            <?php endif; ?>
+            <img id="base-layer" src="assets/male_base.png" class="character-layer" alt="Base Character">
+            <img id="top-layer" class="character-layer" style="display:none;" alt="Top">
+            <img id="pants-layer" class="character-layer" style="display:none;" alt="Pants">
+            <img id="shoes-layer" class="character-layer" style="display:none;" alt="Shoes">
           </div>
         </div>
       </div>
 
-      <!-- Clothing Selection Options -->
+      <!-- Clothing Form -->
       <div class="clothing-options">
-        <form action="create.php" method="POST" class="creator-form">
+        <form method="POST" class="creator-form" action="post_details.php" id="creatorForm">
 
-          <!-- Gender Selection -->
+          <!-- Gender -->
           <div class="form-section">
             <label class="section-label">Character</label>
             <div class="radio-group">
-              <label><input type="radio" name="gender" value="f" <?= $gender === 'f' ? 'checked' : '' ?> onchange="this.form.submit();"> Female</label>
-              <label><input type="radio" name="gender" value="m" <?= $gender === 'm' ? 'checked' : '' ?> onchange="this.form.submit();"> Male</label>
+              <label><input type="radio" name="gender" value="f"> Female</label>
+              <label><input type="radio" name="gender" value="m" checked> Male</label>
             </div>
           </div>
 
-          <!-- Tops -->
-          <div class="form-section">
-            <label class="section-label">Tops</label>
-            <div class="option-grid">
-              <label class="image-option">
-                <input type="radio" name="top" value="top1" <?= $top === 'top1' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/top1<?= $gender ?>.png" alt="Top 1" class="option-image">
-              </label>
-              <label class="image-option">
-                <input type="radio" name="top" value="top2" <?= $top === 'top2' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/top2<?= $gender ?>.png" alt="Top 2" class="option-image">
-              </label>
-              <label class="image-option">
-                <input type="radio" name="top" value="top3" <?= $top === 'top3' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/top3<?= $gender ?>.png" alt="Top 3" class="option-image">
-              </label>
-              <label class="image-option">
-                <input type="radio" name="top" value="top4" <?= $top === 'top4' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/top4<?= $gender ?>.png" alt="Top 4" class="option-image">
-              </label>
-            </div>
-          </div>
+          <?php
+          $clothingCategories = [
+            'top' => ['top1', 'top2'],
+            'pants' => ['pants1', 'pants2'],
+            'shoes' => ['shoes1', 'shoes2']
+          ];
+          ?>
 
-          <!-- Pants -->
-          <div class="form-section">
-            <label class="section-label">Pants</label>
-            <div class="option-grid">
-              <label class="image-option">
-                <input type="radio" name="pants" value="pants1" <?= $pants === 'pants1' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/pants1<?= $gender ?>.png" alt="Pants 1" class="option-image">
-              </label>
-              <label class="image-option">
-                <input type="radio" name="pants" value="pants2" <?= $pants === 'pants2' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/pants2<?= $gender ?>.png" alt="Pants 2" class="option-image">
-              </label>
-              <label class="image-option">
-                <input type="radio" name="pants" value="pants3" <?= $pants === 'pants3' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/pants3<?= $gender ?>.png" alt="Pants 3" class="option-image">
-              </label>
-              <label class="image-option">
-                <input type="radio" name="pants" value="pants4" <?= $pants === 'pants4' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/pants4<?= $gender ?>.png" alt="Pants 4" class="option-image">
-              </label>
+          <?php foreach ($clothingCategories as $type => $items): ?>
+            <div class="form-section">
+              <label class="section-label"><?= ucfirst($type) ?></label>
+              <div class="option-grid">
+                <?php foreach ($items as $item): ?>
+                  <div class="image-option">
+                    <label>
+                      <input type="radio" name="<?= $type ?>" value="<?= $item ?>">
+                      <img src="assets/clothes/<?= $item ?>m.png" class="option-image clickable" data-type="<?= $type ?>" data-item="<?= $item ?>" data-option-id="<?= $item ?>">
+                    </label>
+                    <div class="color-options hidden" id="colors-<?= $item ?>">
+                      <?php
+                      $colors = glob("assets/clothes/{$item}m_*.png");
+                      foreach ($colors as $colorPath):
+                        if (preg_match('/_([a-z]+)\.png$/', $colorPath, $m)):
+                          $color = $m[1];
+                      ?>
+                        <label>
+                          <input type="radio" name="color_<?= $item ?>" value="<?= $color ?>">
+                          <img src="<?= $colorPath ?>" class="color-swatch" data-item="<?= $item ?>" data-color="<?= $color ?>" data-type="<?= $type ?>">
+                        </label>
+                      <?php endif; endforeach; ?>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              </div>
             </div>
-          </div>
+          <?php endforeach; ?>
 
-          <!-- Shoes -->
-          <div class="form-section">
-            <label class="section-label">Shoes</label>
-            <div class="option-grid">
-              <label class="image-option">
-                <input type="radio" name="shoes" value="shoes1" <?= $shoes === 'shoes1' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/shoes1<?= $gender ?>.png" alt="Shoes 1" class="option-image">
-              </label>
-              <label class="image-option">
-                <input type="radio" name="shoes" value="shoes2" <?= $shoes === 'shoes2' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/shoes2<?= $gender ?>.png" alt="Shoes 2" class="option-image">
-              </label>
-              <label class="image-option">
-                <input type="radio" name="shoes" value="shoes3" <?= $shoes === 'shoes3' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/shoes3<?= $gender ?>.png" alt="Shoes 3" class="option-image">
-              </label>
-              <label class="image-option">
-                <input type="radio" name="shoes" value="shoes4" <?= $shoes === 'shoes4' ? 'checked' : '' ?> onchange="this.form.submit();">
-                <img src="assets/clothes/shoes4<?= $gender ?>.png" alt="Shoes 4" class="option-image">
-              </label>
-            </div>
-          </div>
-
-          <!-- Post Button -->
-          <input type="hidden" name="confirmed" value="1">
+          <!-- Submit -->
           <div class="button-row">
-            <button type="submit" formaction="post_details.php" class="submit-button">Post Outfit</button>
+            <button type="submit" class="submit-button">Post Outfit</button>
           </div>
 
         </form>
       </div>
 
     </div>
-
   </div>
 </div>
+
+<!-- CSS to hide/show color boxes -->
+<style>
+  .color-options.hidden {
+    display: none;
+  }
+</style>
+
+<!-- JavaScript for preview and accordion -->
+<script>
+  const genderInputs = document.querySelectorAll('input[name="gender"]');
+  const baseLayer = document.getElementById('base-layer');
+  const topLayer = document.getElementById('top-layer');
+  const pantsLayer = document.getElementById('pants-layer');
+  const shoesLayer = document.getElementById('shoes-layer');
+
+  let gender = 'm';
+  let selection = {};
+
+  // Update gender + base image
+  genderInputs.forEach(input => {
+    input.addEventListener('change', () => {
+      gender = input.value;
+      baseLayer.src = `assets/${gender === 'f' ? 'female_base' : 'male_base'}.png`;
+      updateAllLayers();
+    });
+  });
+
+  // Track all changes
+  document.querySelectorAll('input[type="radio"]').forEach(input => {
+    input.addEventListener('change', () => {
+      selection[input.name] = input.value;
+      updateAllLayers();
+    });
+  });
+
+  // Preview logic
+  function updateAllLayers() {
+    const top = selection.top;
+    const topColor = selection[`color_${top}`];
+    if (top && topColor) {
+      topLayer.src = `assets/clothes/${top}${gender}_${topColor}.png`;
+      topLayer.style.display = 'block';
+    } else {
+      topLayer.style.display = 'none';
+    }
+
+    const pants = selection.pants;
+    const pantsColor = selection[`color_${pants}`];
+    if (pants && pantsColor) {
+      pantsLayer.src = `assets/clothes/${pants}${gender}_${pantsColor}.png`;
+      pantsLayer.style.display = 'block';
+    } else {
+      pantsLayer.style.display = 'none';
+    }
+
+    const shoes = selection.shoes;
+    const shoesColor = selection[`color_${shoes}`];
+    if (shoes && shoesColor) {
+      shoesLayer.src = `assets/clothes/${shoes}${gender}_${shoesColor}.png`;
+      shoesLayer.style.display = 'block';
+    } else {
+      shoesLayer.style.display = 'none';
+    }
+  }
+
+  // Accordion behavior for color swatches
+  document.querySelectorAll('.option-image.clickable').forEach(img => {
+    img.addEventListener('click', () => {
+      const clickedId = img.getAttribute('data-option-id');
+      document.querySelectorAll('.color-options').forEach(opt => {
+        opt.classList.add('hidden');
+      });
+      const showBox = document.getElementById(`colors-${clickedId}`);
+      if (showBox) {
+        showBox.classList.remove('hidden');
+      }
+    });
+  });
+</script>
 
 <?php include 'includes/footer.php'; ?>
