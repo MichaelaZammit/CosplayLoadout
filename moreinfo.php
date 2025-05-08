@@ -42,32 +42,34 @@ if (isset($_SESSION['user_id'])) {
 <div class="page-container">
 
 <div class="post-wrapper">
-  <!-- LEFT: Character + Actions -->
-  <div class="character-side">
-    <img src="uploads/<?= htmlspecialchars($post['image']); ?>" alt="Post Image" class="character-img">
 
-    <div class="post-actions">
-      <form action="like_post.php" method="POST" class="action-form">
+  <!-- LEFT: IMAGE -->
+  <div class="image-side">
+    <img src="uploads/<?= htmlspecialchars($post['image']); ?>" alt="Post Image" class="post-img">
+  </div>
+
+  <!-- RIGHT: TEXT + ACTIONS -->
+  <div class="details-side">
+
+    <div class="action-row">
+      <form action="like_post.php" method="POST" class="icon-form">
         <input type="hidden" name="post_id" value="<?= $post['id']; ?>">
-        <button type="submit" class="like-button">❤️</button>
+        <button type="submit" class="icon-button">❤️</button>
       </form>
       <span class="likes-count"><?= $like_count ?></span>
 
-      <form action="repost.php" method="POST" class="action-form">
+      <form action="repost.php" method="POST" class="icon-form">
         <input type="hidden" name="post_id" value="<?= $post['id']; ?>">
-        <button type="submit" class="repost-button">🔁</button>
+        <button type="submit" class="icon-button">🔁</button>
+      </form>
+
+      <form action="follow_user.php" method="POST" class="follow-form">
+        <input type="hidden" name="follow_user_id" value="<?= $post['user_id']; ?>">
+        <button type="submit" class="follow-button <?= $isFollowing ? 'following' : '' ?>">
+          <?= $isFollowing ? '✔ Following' : '+ Follow' ?>
+        </button>
       </form>
     </div>
-  </div>
-
-  <!-- RIGHT: Info -->
-  <div class="post-info">
-    <form action="follow_user.php" method="POST" class="follow-form">
-      <input type="hidden" name="follow_user_id" value="<?= $post['user_id']; ?>">
-      <button type="submit" class="follow-button <?= $isFollowing ? 'following' : '' ?>">
-        <?= $isFollowing ? '✔ Following' : '+ Follow' ?>
-      </button>
-    </form>
 
     <h2 class="post-title"><?= htmlspecialchars($post['title']); ?></h2>
     <p class="description"><?= nl2br(htmlspecialchars($post['description'])); ?></p>

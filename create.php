@@ -12,6 +12,7 @@
             <img id="top-layer" class="character-layer" style="display:none;" alt="Top">
             <img id="pants-layer" class="character-layer" style="display:none;" alt="Pants">
             <img id="shoes-layer" class="character-layer" style="display:none;" alt="Shoes">
+            <img id="references-layer" class="character-layer" style="display:none;" alt="References">
           </div>
         </div>
       </div>
@@ -29,42 +30,49 @@
             </div>
           </div>
 
-          <?php
-          $clothingCategories = [
-            'top' => ['top1', 'top2'],
-            'pants' => ['pants1', 'pants2'],
-            'shoes' => ['shoes1', 'shoes2']
-          ];
-          ?>
+          <!-- Clothing Rows -->
+          <div class="clothing-rows">
+            <?php
+            $clothingCategories = [
+              'top' => ['top1', 'top2', 'top3', 'top4', 'top5'],
+              'pants' => ['pants1', 'pants2', 'pants3', 'pants4', 'pants5'],
+              'shoes' => ['shoes1', 'shoes2', 'shoes3', 'shoes4', 'shoes5'],
+              'references' => ['img1', 'img2', 'img3', 'img4', 'img5']
+            ];
+            ?>
 
-          <?php foreach ($clothingCategories as $type => $items): ?>
-            <div class="form-section">
-              <label class="section-label"><?= ucfirst($type) ?></label>
-              <div class="option-grid">
-                <?php foreach ($items as $item): ?>
+            <?php foreach ($clothingCategories as $type => $items): ?>
+              <div class="clothing-row">
+                <label class="section-label"><?= ucfirst($type) ?></label>
+                <div class="option-row">
+                  <?php foreach ($items as $item): ?>
+                    <div class="image-option">
+                      <label>
+                        <input type="radio" name="<?= $type ?>" value="<?= $item ?>">
+                        <img src="assets/clothes/<?= $item ?>m.png"
+                          class="option-image clickable"
+                          data-type="<?= $type ?>"
+                          data-item="<?= $item ?>"
+                          data-option-id="<?= $item ?>">
+                      </label>
+                    </div>
+                  <?php endforeach; ?>
+                  <!-- No clothing option -->
                   <div class="image-option">
                     <label>
-                      <input type="radio" name="<?= $type ?>" value="<?= $item ?>">
-                      <img src="assets/clothes/<?= $item ?>m.png" class="option-image clickable" data-type="<?= $type ?>" data-item="<?= $item ?>" data-option-id="<?= $item ?>">
+                      <input type="radio" name="<?= $type ?>" value="" data-none="true">
+                      <img src="assets/icons/no_<?= $type ?>.png"
+                        class="option-image no-clothes-img"
+                        alt="No <?= ucfirst($type) ?>">
                     </label>
-                    <div class="color-options hidden" id="colors-<?= $item ?>">
-                      <?php
-                      $colors = glob("assets/clothes/{$item}m_*.png");
-                      foreach ($colors as $colorPath):
-                        if (preg_match('/_([a-z]+)\.png$/', $colorPath, $m)):
-                          $color = $m[1];
-                      ?>
-                        <label>
-                          <input type="radio" name="color_<?= $item ?>" value="<?= $color ?>">
-                          <img src="<?= $colorPath ?>" class="color-swatch" data-item="<?= $item ?>" data-color="<?= $color ?>" data-type="<?= $type ?>">
-                        </label>
-                      <?php endif; endforeach; ?>
-                    </div>
                   </div>
-                <?php endforeach; ?>
+                </div>
+
+                <!-- Color options will be shown here -->
+                <div class="color-options hidden" id="color-options-<?= $type ?>"></div>
               </div>
-            </div>
-          <?php endforeach; ?>
+            <?php endforeach; ?>
+          </div>
 
           <!-- Submit -->
           <div class="button-row">
@@ -73,30 +81,21 @@
 
         </form>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- CSS to hide/show color boxes -->
-<style>
-  .color-options.hidden {
-    display: none;
-  }
-</style>
-
-<!-- JavaScript for preview and accordion -->
 <script>
   const genderInputs = document.querySelectorAll('input[name="gender"]');
   const baseLayer = document.getElementById('base-layer');
   const topLayer = document.getElementById('top-layer');
   const pantsLayer = document.getElementById('pants-layer');
   const shoesLayer = document.getElementById('shoes-layer');
+  const referencesLayer = document.getElementById('references-layer');
 
   let gender = 'm';
   let selection = {};
 
-  // Update gender + base image
   genderInputs.forEach(input => {
     input.addEventListener('change', () => {
       gender = input.value;
@@ -105,15 +104,17 @@
     });
   });
 
-  // Track all changes
   document.querySelectorAll('input[type="radio"]').forEach(input => {
     input.addEventListener('change', () => {
-      selection[input.name] = input.value;
+      if (input.dataset.none === "true") {
+        selection[input.name] = null;
+      } else {
+        selection[input.name] = input.value;
+      }
       updateAllLayers();
     });
   });
 
-  // Preview logic
   function updateAllLayers() {
     const top = selection.top;
     const topColor = selection[`color_${top}`];
@@ -141,21 +142,71 @@
     } else {
       shoesLayer.style.display = 'none';
     }
+
+    // REFERENCES layer
+    const references = selection.references;
+    const referencesColor = selection[`color_${references}`];
+    if (references && referencesColor) {
+      referencesLayer.src = `assets/clothes/${references}${gender}_${referencesColor}.png`;
+      referencesLayer.style.display = 'block';
+    } else if (references) {
+      referencesLayer.src = `assets/clothes/${references}${gender}.png`;
+      referencesLayer.style.display = 'block';
+    } else {
+      referencesLayer.style.display = 'none';
+    }
   }
 
-  // Accordion behavior for color swatches
+  // Move swatches below the clothing row when clicked
   document.querySelectorAll('.option-image.clickable').forEach(img => {
     img.addEventListener('click', () => {
-      const clickedId = img.getAttribute('data-option-id');
+      const type = img.getAttribute('data-type');
+      const item = img.getAttribute('data-item');
+
+      // Hide all color swatch containers
       document.querySelectorAll('.color-options').forEach(opt => {
         opt.classList.add('hidden');
+        opt.innerHTML = '';
       });
-      const showBox = document.getElementById(`colors-${clickedId}`);
-      if (showBox) {
-        showBox.classList.remove('hidden');
+
+      // Grab swatches for selected item and insert them
+      const source = document.getElementById(`colors-${item}`);
+      const target = document.getElementById(`color-options-${type}`);
+      if (source && target) {
+        target.innerHTML = source.innerHTML;
+        target.classList.remove('hidden');
       }
     });
   });
+
+  // When a color swatch is clicked, store it and update preview
+  document.addEventListener('change', function (e) {
+    const input = e.target;
+    if (input.name.startsWith('color_')) {
+      const item = input.name.replace('color_', '');
+      selection[`color_${item}`] = input.value;
+      updateAllLayers();
+    }
+  });
 </script>
+
+<!-- Hidden color swatches (offscreen) -->
+<?php foreach ($clothingCategories as $type => $items): ?>
+  <?php foreach ($items as $item): ?>
+    <div id="colors-<?= $item ?>" style="display: none;">
+      <?php
+      $colors = glob("assets/clothes/{$item}m_*.png");
+      foreach ($colors as $colorPath):
+        if (preg_match('/_([a-z]+)\.png$/', $colorPath, $m)):
+          $color = $m[1];
+      ?>
+        <label>
+          <input type="radio" name="color_<?= $item ?>" value="<?= $color ?>">
+          <img src="<?= $colorPath ?>" class="color-swatch" data-item="<?= $item ?>" data-color="<?= $color ?>" data-type="<?= $type ?>">
+        </label>
+      <?php endif; endforeach; ?>
+    </div>
+  <?php endforeach; ?>
+<?php endforeach; ?>
 
 <?php include 'includes/footer.php'; ?>
