@@ -47,25 +47,25 @@ if (isset($pageStyles)) {
         <a href="/supplies/contact_lenses.php">Contact Lenses</a>
         <a href="/supplies/charity_shops.php">Charity Shops</a>
         <a href="/supplies/corsets.php">Corsets</a>
-        <a href="/supplies/dancewear_leotards.php">Dancewear & Leotards</a>
-        <a href="/supplies/electronics_lighting.php">Electronics & Lighting</a>
-        <a href="/supplies/fabric_notions.php">Fabric & Notions</a>
-        <a href="/supplies/fiberglass_fabrication.php">Fiberglass & Fabrication</a>
-        <a href="/supplies/foam_pvc.php">Foam & PVC</a>
-        <a href="/supplies/jewelry_making.php">Jewelry-making</a>
+        <a href="/supplies/dancewear_and_leotards.php">Dancewear & Leotards</a>
+        <a href="/supplies/electronics_and_lighting.php">Electronics & Lighting</a>
+        <a href="/supplies/fabric_and_notions.php">Fabric & Notions</a>
+        <a href="/supplies/fiberglass_and_fabrication.php">Fiberglass & Fabrication</a>
+        <a href="/supplies/foam_and_pvc.php">Foam & PVC</a>
+        <a href="/supplies/jewelrymaking.php">Jewelry-making</a>
         <a href="/supplies/leatherworking.php">Leatherworking</a>
         <a href="/supplies/miscellaneous.php">Miscellaneous</a>
-        <a href="/supplies/paints_dyes.php">Paints & Dyes</a>
+        <a href="/supplies/paints_and_dyes.php">Paints & Dyes</a>
         <a href="/supplies/patterns.php">Patterns</a>
         <a href="/supplies/makeup.php">Makeup</a>
-        <a href="/supplies/power_tools_equipment.php">Power Tools & Equipment</a>
+        <a href="/supplies/power_tools_and_equipment.php">Power Tools & Equipment</a>
         <a href="/supplies/prosthetics.php">Prosthetics</a>
-        <a href="/supplies/sculpting_casting.php">Sculpting & Casting</a>
+        <a href="/supplies/sculpting_and_casting.php">Sculpting & Casting</a>
         <a href="/supplies/shoes.php">Shoes</a>
         <a href="/supplies/thermoplastics_fosshape.php">Thermoplastics & Fosshape</a>
-        <a href="/supplies/tights_socks.php">Tights & Socks</a>
+        <a href="/supplies/tights_and_socks.php">Tights & Socks</a>
         <a href="/supplies/trims.php">Trims</a>
-        <a href="/supplies/wigs_hair.php">Wigs & Hair</a>
+        <a href="/supplies/wigs_and_hair.php">Wigs & Hair</a>
       </div>
     </div>
   </div>
