@@ -6,6 +6,20 @@ include 'includes/header.php';
 $query = $_GET['q'] ?? '';
 $search = "%$query%";
 
+// Helper to get layered image paths
+function imagePath($item, $gender, $color) {
+  $base = "assets/clothes/";
+  if (!$item) return null;
+
+  if ($color) {
+    $coloredPath = "{$base}{$item}{$gender}_{$color}.png";
+    if (file_exists($coloredPath)) return $coloredPath;
+  }
+
+  $fallback = "{$base}{$item}{$gender}.png";
+  return file_exists($fallback) ? $fallback : null;
+}
+
 // Search posts
 $post_stmt = $pdo->prepare("
   SELECT posts.*, users.username, users.profile_image 
@@ -50,36 +64,35 @@ $users = $user_stmt->fetchAll();
   <?php else: ?>
     <?php foreach ($posts as $post): ?>
       <?php
-        $image = $post['image'] ?? '';
-        $gender = str_contains($image, 'm') ? 'male' : 'female';
-        $baseImage = ($gender === 'male') ? 'male_base.png' : 'female_base.png';
+        $gender = $post['gender'] ?? 'm';
+        $suffix = $gender === 'f' ? 'f' : 'm';
+        $baseImage = $gender === 'f' ? 'female_base.png' : 'male_base.png';
 
-        preg_match('/top\d+/', $image, $topMatch);
-        preg_match('/pants\d+/', $image, $pantsMatch);
-        preg_match('/shoes\d+/', $image, $shoesMatch);
-
-        $suffix = ($gender === 'male') ? 'm' : 'f';
-        $topFile = isset($topMatch[0]) ? $topMatch[0] . $suffix : '';
-        $pantsFile = isset($pantsMatch[0]) ? $pantsMatch[0] . $suffix : '';
-        $shoesFile = isset($shoesMatch[0]) ? $shoesMatch[0] . $suffix : '';
+        $topPath = imagePath($post['top'], $suffix, $post['top_color']);
+        $pantsPath = imagePath($post['pants'], $suffix, $post['pants_color']);
+        $shoesPath = imagePath($post['shoes'], $suffix, $post['shoes_color']);
+        $refPath = imagePath($post['reference_item'], $suffix, $post['reference_color']);
       ?>
 
       <a href="view.php?id=<?= $post['id']; ?>" class="post-link">
         <div class="post-card">
-        <div class="post-header" style="text-align: center;">
-  <span class="username">@<?= htmlspecialchars($post['username']) ?></span>
-</div>
+          <div class="post-header" style="text-align: center;">
+            <span class="username">@<?= htmlspecialchars($post['username']) ?></span>
+          </div>
 
-          <div class="character-container">
-            <img src="Assets/<?= $baseImage ?>" class="layer base" alt="Base Body">
-            <?php if (!empty($topFile)): ?>
-              <img src="Assets/clothes/<?= $topFile ?>.png" class="layer top" alt="Top">
+          <div class="character-container" style="position: relative; width: 100%; aspect-ratio: 1/1;">
+            <img src="assets/<?= $baseImage ?>" class="layer base" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
+            <?php if ($topPath): ?>
+              <img src="<?= $topPath ?>" class="layer top" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
             <?php endif; ?>
-            <?php if (!empty($pantsFile)): ?>
-              <img src="Assets/clothes/<?= $pantsFile ?>.png" class="layer pants" alt="Pants">
+            <?php if ($pantsPath): ?>
+              <img src="<?= $pantsPath ?>" class="layer pants" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
             <?php endif; ?>
-            <?php if (!empty($shoesFile)): ?>
-              <img src="Assets/clothes/<?= $shoesFile ?>.png" class="layer shoes" alt="Shoes">
+            <?php if ($shoesPath): ?>
+              <img src="<?= $shoesPath ?>" class="layer shoes" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
+            <?php endif; ?>
+            <?php if ($refPath): ?>
+              <img src="<?= $refPath ?>" class="layer reference" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
             <?php endif; ?>
           </div>
 

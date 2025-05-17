@@ -5,76 +5,73 @@ $gender = $_POST['gender'] ?? 'f';
 $top = $_POST['top'] ?? null;
 $pants = $_POST['pants'] ?? null;
 $shoes = $_POST['shoes'] ?? null;
+$references = $_POST['references'] ?? null;
 
-// Get color based on item name (like color_top2)
-$topColor = $top ? ($_POST["color_{$top}"] ?? null) : null;
-$pantsColor = $pants ? ($_POST["color_{$pants}"] ?? null) : null;
-$shoesColor = $shoes ? ($_POST["color_{$shoes}"] ?? null) : null;
+$topColor = $_POST['top_color'] ?? '';
+$pantsColor = $_POST['pants_color'] ?? '';
+$shoesColor = $_POST['shoes_color'] ?? '';
+$referencesColor = $_POST['references_color'] ?? '';
 
-// Helper to build full file path
 function imagePath($item, $gender, $color) {
-  return ($item && $color) ? "assets/clothes/{$item}{$gender}_{$color}.png" : null;
+    $base = "assets/clothes/";
+    if (!$item) return null;
+
+    $path1 = "{$base}{$item}{$gender}_{$color}.png";
+    $path2 = "{$base}{$item}{$gender}.png";
+
+    if ($color && file_exists($path1)) return $path1;
+    if (file_exists($path2)) return $path2;
+
+    return null;
 }
 
 $topImage = imagePath($top, $gender, $topColor);
 $pantsImage = imagePath($pants, $gender, $pantsColor);
 $shoesImage = imagePath($shoes, $gender, $shoesColor);
+$referencesImage = imagePath($references, $gender, $referencesColor);
 ?>
 
 <div class="create-page-wrapper">
   <div class="create-card">
     <div class="creator-layout">
 
-      <!-- Character Preview -->
       <div class="character-preview">
         <div class="preview-card">
           <div class="preview-box">
-            <img src="assets/<?= $gender === 'f' ? 'female_base.png' : 'male_base.png' ?>" class="character-layer" alt="Base Character">
+            <img src="assets/<?= $gender === 'f' ? 'female_base.png' : 'male_base.png' ?>" class="character-layer">
 
-            <?php if ($topImage && file_exists($topImage)): ?>
-              <img src="<?= $topImage ?>" class="character-layer" alt="Top">
-            <?php else: ?>
-              <p style="color:red; font-size: 12px;">Top missing: <?= $topImage ?></p>
-            <?php endif; ?>
-
-            <?php if ($pantsImage && file_exists($pantsImage)): ?>
-              <img src="<?= $pantsImage ?>" class="character-layer" alt="Pants">
-            <?php else: ?>
-              <p style="color:red; font-size: 12px;">Pants missing: <?= $pantsImage ?></p>
-            <?php endif; ?>
-
-            <?php if ($shoesImage && file_exists($shoesImage)): ?>
-              <img src="<?= $shoesImage ?>" class="character-layer" alt="Shoes">
-            <?php else: ?>
-              <p style="color:red; font-size: 12px;">Shoes missing: <?= $shoesImage ?></p>
-            <?php endif; ?>
+            <?php foreach ([$topImage, $pantsImage, $shoesImage, $referencesImage] as $img): ?>
+              <?php if ($img && file_exists($img)): ?>
+                <img src="<?= $img ?>" class="character-layer">
+              <?php endif; ?>
+            <?php endforeach; ?>
           </div>
         </div>
       </div>
 
-      <!-- Title & Description Form -->
       <div class="finish-form">
         <form action="submit_post.php" method="POST" class="creator-form">
-          <div class="input-group">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required placeholder="Name your outfit...">
-          </div>
-
-          <div class="input-group">
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" required placeholder="Describe your outfit..."></textarea>
-          </div>
-
-          <!-- Hidden Fields to pass to submit_post.php -->
           <input type="hidden" name="gender" value="<?= $gender ?>">
           <input type="hidden" name="top" value="<?= $top ?>">
-          <input type="hidden" name="pants" value="<?= $pants ?>">
-          <input type="hidden" name="shoes" value="<?= $shoes ?>">
           <input type="hidden" name="top_color" value="<?= $topColor ?>">
+          <input type="hidden" name="pants" value="<?= $pants ?>">
           <input type="hidden" name="pants_color" value="<?= $pantsColor ?>">
+          <input type="hidden" name="shoes" value="<?= $shoes ?>">
           <input type="hidden" name="shoes_color" value="<?= $shoesColor ?>">
+          <input type="hidden" name="references" value="<?= $references ?>">
+          <input type="hidden" name="references_color" value="<?= $referencesColor ?>">
 
-          <button type="submit" class="submit-button">Post Outfit</button>
+          <div class="input-group">
+            <label>Title</label>
+            <input name="title" required>
+          </div>
+
+          <div class="input-group">
+            <label>Description</label>
+            <textarea name="description" required></textarea>
+          </div>
+
+          <button type="submit" class="submit-button">Submit</button>
         </form>
       </div>
 

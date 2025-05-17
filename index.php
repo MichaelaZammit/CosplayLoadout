@@ -7,9 +7,10 @@ $stmt = $pdo->query("
   SELECT posts.*, users.username, users.profile_image 
   FROM posts 
   JOIN users ON posts.user_id = users.id 
-  WHERE posts.repost_of IS NULL
+  WHERE posts.repost_of IS NULL AND posts.is_deleted = 0
   ORDER BY posts.created_at DESC
 ");
+
 $posts = $stmt->fetchAll();
 ?>
 

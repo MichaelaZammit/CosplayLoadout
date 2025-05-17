@@ -1,66 +1,70 @@
 <?php
-require 'includes/db.php';
+ini_set('memory_limit', '512M');
 session_start();
+require 'includes/db.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
+$user_id = $_SESSION['user_id'];
+$title = $_POST['title'];
+$description = $_POST['description'];
+
+$gender = $_POST['gender'];
+$top = $_POST['top'] ?? '';
+$pants = $_POST['pants'] ?? '';
+$shoes = $_POST['shoes'] ?? '';
+$references = $_POST['references'] ?? '';
+
+$topColor = $_POST['top_color'] ?? '';
+$pantsColor = $_POST['pants_color'] ?? '';
+$shoesColor = $_POST['shoes_color'] ?? '';
+$referencesColor = $_POST['references_color'] ?? '';
+
+function imagePath($item, $gender, $color) {
+    $base = "assets/clothes/";
+    if (!$item) return null;
+    $path1 = "{$base}{$item}{$gender}_{$color}.png";
+    $path2 = "{$base}{$item}{$gender}.png";
+    return file_exists($path1) ? $path1 : (file_exists($path2) ? $path2 : null);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id = $_SESSION['user_id'];
-    $title = $_POST['title'] ?? '';
-    $description = $_POST['description'] ?? '';
-    $gender = $_POST['gender'] ?? 'f';
+// Base image
+$basePath = "assets/" . ($gender === 'f' ? 'female_base.png' : 'male_base.png');
+$base = imagecreatefrompng($basePath);
+imagesavealpha($base, true);
 
-    $top = $_POST['top'] ?? '';
-    $pants = $_POST['pants'] ?? '';
-    $shoes = $_POST['shoes'] ?? '';
+$width = imagesx($base);
+$height = imagesy($base);
 
-    $topColor = $_POST['top_color'] ?? '';
-    $pantsColor = $_POST['pants_color'] ?? '';
-    $shoesColor = $_POST['shoes_color'] ?? '';
+$final = imagecreatetruecolor($width, $height);
+imagesavealpha($final, true);
+$transparent = imagecolorallocatealpha($final, 0, 0, 0, 127);
+imagefill($final, 0, 0, $transparent);
+imagecopy($final, $base, 0, 0, 0, 0, $width, $height);
 
-    // Build valid image paths
-    $topImagePath = (!empty($top) && !empty($topColor)) ? "assets/clothes/{$top}{$gender}_{$topColor}.png" : null;
-    $pantsImagePath = (!empty($pants) && !empty($pantsColor)) ? "assets/clothes/{$pants}{$gender}_{$pantsColor}.png" : null;
-    $shoesImagePath = (!empty($shoes) && !empty($shoesColor)) ? "assets/clothes/{$shoes}{$gender}_{$shoesColor}.png" : null;
-
-    // Generate output filename
-    $image_name = uniqid("outfit_") . ".png";
-    $output_path = 'uploads/' . $image_name;
-
-    // Load base character image
-    $basePath = 'assets/' . ($gender === 'f' ? 'female_base.png' : 'male_base.png');
-    $base = imagecreatefrompng($basePath);
-    imagealphablending($base, true);
-    imagesavealpha($base, true);
-
-    // Safely overlay a clothing image
-    function overlayImage(&$base, $filePath) {
-        if (!empty($filePath) && file_exists($filePath)) {
-            $layer = imagecreatefrompng($filePath);
-            imagecopy($base, $layer, 0, 0, 0, 0, imagesx($layer), imagesy($layer));
-            imagedestroy($layer);
-        }
+// Layer merge
+foreach ([imagePath($top, $gender, $topColor), imagePath($pants, $gender, $pantsColor), imagePath($shoes, $gender, $shoesColor), imagePath($references, $gender, $referencesColor)] as $layerPath) {
+    if ($layerPath && file_exists($layerPath)) {
+        $layer = imagecreatefrompng($layerPath);
+        imagesavealpha($layer, true);
+        imagecopy($final, $layer, 0, 0, 0, 0, $width, $height);
+        imagedestroy($layer);
     }
-
-    // Apply clothing layers
-    overlayImage($base, $topImagePath);
-    overlayImage($base, $pantsImagePath);
-    overlayImage($base, $shoesImagePath);
-
-    // Save final image
-    imagepng($base, $output_path);
-    imagedestroy($base);
-
-    // Save to database
-    $stmt = $pdo->prepare("INSERT INTO posts (user_id, image, title, description) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$user_id, $image_name, $title, $description]);
-
-    header("Location: profile.php");
-    exit;
-} else {
-    echo "Invalid request.";
 }
-?>
+
+$filename = uniqid("outfit_") . ".png";
+imagepng($final, "uploads/" . $filename);
+imagedestroy($final);
+
+$stmt = $pdo->prepare("INSERT INTO posts (
+    user_id, title, description, image, gender,
+    top, top_color, pants, pants_color,
+    shoes, shoes_color, reference_item, reference_color, created_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+
+$stmt->execute([
+    $user_id, $title, $description, $filename, $gender,
+    $top, $topColor, $pants, $pantsColor,
+    $shoes, $shoesColor, $references, $referencesColor
+]);
+
+header("Location: profile.php");
+exit;

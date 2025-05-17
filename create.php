@@ -57,7 +57,6 @@
                       </label>
                     </div>
                   <?php endforeach; ?>
-                  <!-- No clothing option -->
                   <div class="image-option">
                     <label>
                       <input type="radio" name="<?= $type ?>" value="" data-none="true">
@@ -68,13 +67,17 @@
                   </div>
                 </div>
 
-                <!-- Color options will be shown here -->
                 <div class="color-options hidden" id="color-options-<?= $type ?>"></div>
               </div>
             <?php endforeach; ?>
           </div>
 
-          <!-- Submit -->
+          <!-- Hidden inputs for color selections -->
+          <input type="hidden" name="top_color" id="top_color_input">
+          <input type="hidden" name="pants_color" id="pants_color_input">
+          <input type="hidden" name="shoes_color" id="shoes_color_input">
+          <input type="hidden" name="references_color" id="references_color_input">
+
           <div class="button-row">
             <button type="submit" class="submit-button">Post Outfit</button>
           </div>
@@ -143,7 +146,6 @@
       shoesLayer.style.display = 'none';
     }
 
-    // REFERENCES layer
     const references = selection.references;
     const referencesColor = selection[`color_${references}`];
     if (references && referencesColor) {
@@ -157,45 +159,56 @@
     }
   }
 
-  // Move swatches below the clothing row when clicked
+  // Handle showing color swatches and updating hidden form values
   document.querySelectorAll('.option-image.clickable').forEach(img => {
     img.addEventListener('click', () => {
       const type = img.getAttribute('data-type');
       const item = img.getAttribute('data-item');
 
-      // Hide all color swatch containers
       document.querySelectorAll('.color-options').forEach(opt => {
         opt.classList.add('hidden');
         opt.innerHTML = '';
       });
 
-      // Grab swatches for selected item and insert them
       const source = document.getElementById(`colors-${item}`);
       const target = document.getElementById(`color-options-${type}`);
       if (source && target) {
         target.innerHTML = source.innerHTML;
         target.classList.remove('hidden');
+
+        // re-attach change listeners to new radios
+        target.querySelectorAll('input[type="radio"]').forEach(colorInput => {
+          colorInput.addEventListener('change', function () {
+            const input = this;
+            const color = input.value;
+            const item = input.name.replace('color_', '');
+            const type = getClothingType(item);
+            selection[`color_${item}`] = color;
+            const hiddenInput = document.getElementById(`${type}_color_input`);
+            if (hiddenInput) hiddenInput.value = color;
+            updateAllLayers();
+          });
+        });
       }
     });
   });
 
-  // When a color swatch is clicked, store it and update preview
-  document.addEventListener('change', function (e) {
-    const input = e.target;
-    if (input.name.startsWith('color_')) {
-      const item = input.name.replace('color_', '');
-      selection[`color_${item}`] = input.value;
-      updateAllLayers();
-    }
-  });
+  function getClothingType(itemName) {
+    if (itemName.includes('top')) return 'top';
+    if (itemName.includes('pants')) return 'pants';
+    if (itemName.includes('shoes')) return 'shoes';
+    if (itemName.includes('img')) return 'references';
+    return '';
+  }
 </script>
 
-<!-- Hidden color swatches (offscreen) -->
+<!-- Hidden color swatches -->
 <?php foreach ($clothingCategories as $type => $items): ?>
   <?php foreach ($items as $item): ?>
     <div id="colors-<?= $item ?>" style="display: none;">
       <?php
-      $colors = glob("assets/clothes/{$item}m_*.png");
+      $gender = $_POST['gender'] ?? $_GET['gender'] ?? 'm';
+      $colors = glob("assets/clothes/{$item}{$gender}_*.png");
       foreach ($colors as $colorPath):
         if (preg_match('/_([a-z]+)\.png$/', $colorPath, $m)):
           $color = $m[1];
