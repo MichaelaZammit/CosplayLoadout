@@ -14,6 +14,11 @@ $stmt = $pdo->prepare("SELECT posts.*, users.username, users.id AS user_id FROM 
 $stmt->execute([$post_id]);
 $post = $stmt->fetch();
 
+if (!$post) {
+  echo "Post not found.";
+  exit;
+}
+
 // Fetch comments
 $comments_stmt = $pdo->prepare("
     SELECT comments.*, users.username, users.id AS user_id
@@ -41,11 +46,17 @@ if (isset($_SESSION['user_id'])) {
 
 <div class="page-container">
 
-<div class="post-wrapper">
+<div class="post-wrapper" style="display: flex; gap: 40px; align-items: flex-start;">
 
-  <!-- LEFT: IMAGE -->
+  <!-- LEFT: CHARACTER PREVIEW -->
   <div class="image-side">
-    <img src="uploads/<?= htmlspecialchars($post['image']); ?>" alt="Post Image" class="post-img">
+    <div class="character-container" style="position: relative; width: 300px; height: 600px;">
+      <img src="assets/<?= $post['gender'] === 'f' ? 'female_base.png' : 'male_base.png' ?>" class="character-layer" style="position: absolute; top: 0; left: 0; width: 100%;">
+      <?php if ($post['top']): ?><img src="assets/clothes/<?= $post['top'] . $post['gender'] ?><?= $post['top_color'] ? "_{$post['top_color']}" : "" ?>.png" class="character-layer" style="position: absolute; top: 0; left: 0; width: 100%;"><?php endif; ?>
+      <?php if ($post['pants']): ?><img src="assets/clothes/<?= $post['pants'] . $post['gender'] ?><?= $post['pants_color'] ? "_{$post['pants_color']}" : "" ?>.png" class="character-layer" style="position: absolute; top: 0; left: 0; width: 100%;"><?php endif; ?>
+      <?php if ($post['shoes']): ?><img src="assets/clothes/<?= $post['shoes'] . $post['gender'] ?><?= $post['shoes_color'] ? "_{$post['shoes_color']}" : "" ?>.png" class="character-layer" style="position: absolute; top: 0; left: 0; width: 100%;"><?php endif; ?>
+      <?php if ($post['reference_item']): ?><img src="assets/clothes/<?= $post['reference_item'] . $post['gender'] ?><?= $post['reference_color'] ? "_{$post['reference_color']}" : "" ?>.png" class="character-layer" style="position: absolute; top: 0; left: 0; width: 100%;"><?php endif; ?>
+    </div>
   </div>
 
   <!-- RIGHT: TEXT + ACTIONS -->
@@ -72,12 +83,46 @@ if (isset($_SESSION['user_id'])) {
     </div>
 
     <h2 class="post-title"><?= htmlspecialchars($post['title']); ?></h2>
-    <p class="description"><?= nl2br(htmlspecialchars($post['description'])); ?></p>
+    <?php
+      function makeLinksClickable($text) {
+        $text = htmlspecialchars($text);
+        $text = nl2br($text);
+    
+        // Replace plain links with anchor tags (surrounded by word boundaries or line breaks)
+        return preg_replace_callback(
+            '/(?<!href=")(https?:\/\/[^\s<]+)/',
+            function ($matches) {
+                $url = $matches[1];
+                return '<a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $url . '</a>';
+            },
+            $text
+        );
+    }    
+      ?>
+      <p class="description"><?= makeLinksClickable($post['description']); ?></p>
+
+
+    <?php if (!empty($post['images'])):
+      $images = explode(',', $post['images']); ?>
+      <div class="post-images" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px;">
+        <?php foreach ($images as $img): ?>
+          <img src="uploads/<?= htmlspecialchars(trim($img)) ?>" alt="Additional Image" style="width: 100px; height: auto; border-radius: 6px;">
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
 
     <div class="post-meta">
       <p>Posted by: <a href="profile.php?id=<?= $post['user_id']; ?>" class="user-link">@<?= htmlspecialchars($post['username']); ?></a></p>
       <p><?= htmlspecialchars($post['created_at']); ?></p>
     </div>
+
+    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $post['user_id']): ?>
+      <form action="edit_post.php" method="GET" class="edit-post-form">
+        <input type="hidden" name="id" value="<?= $post['id']; ?>">
+        <button type="submit" class="follow-button">Edit Post</button>
+      </form>
+    <?php endif; ?>
+
   </div>
 </div>
 
@@ -110,8 +155,11 @@ if (isset($_SESSION['user_id'])) {
 
 <script>
 // Like button animation
-document.getElementById('like-form').addEventListener('submit', function(e) {
-  var button = document.getElementById('like-button');
-  button.classList.add('liked');
-});
+const likeForm = document.querySelector('.icon-form');
+if (likeForm) {
+  likeForm.addEventListener('submit', function(e) {
+    const button = likeForm.querySelector('.icon-button');
+    button.classList.add('liked');
+  });
+}
 </script>

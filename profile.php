@@ -73,7 +73,7 @@ $following_count = $following_count->fetchColumn();
   <div class="home-container">
     <div class="grid-container">
       <?php foreach ($posts as $post): ?>
-        <?php if (!empty($post['image']) && file_exists("uploads/" . $post['image'])): ?>
+        <?php if (!empty($post['title'])): ?>
             <div class="post-card">
               <?php if ($profile_id == $_SESSION['user_id']): ?>
                 <input type="checkbox" name="post_ids[]" value="<?= $post['id'] ?>" class="delete-checkbox" style="display:none;">
@@ -126,7 +126,7 @@ $following_count = $following_count->fetchColumn();
 
 <?php if ($profile_id == $_SESSION['user_id']): ?>
   <div class="center-btn" style="text-align:center; display:none;" id="confirmDeleteWrapper">
-    <button type="button" class="delete-btn" onclick="confirmDelete()">Delete Selected</button>
+    <button type="button" class="delete-btn" onclick="confirmDelete()">Delete Posts</button>
   </div>
 </form>
 <?php endif; ?>

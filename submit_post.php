@@ -1,70 +1,66 @@
 <?php
-ini_set('memory_limit', '512M');
+include 'includes/db.php';
 session_start();
-require 'includes/db.php';
 
-$user_id = $_SESSION['user_id'];
-$title = $_POST['title'];
-$description = $_POST['description'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_id = $_SESSION['user_id'];
+    $title = $_POST['title'];
+    $description = $_POST['description'];
 
-$gender = $_POST['gender'];
-$top = $_POST['top'] ?? '';
-$pants = $_POST['pants'] ?? '';
-$shoes = $_POST['shoes'] ?? '';
-$references = $_POST['references'] ?? '';
+    $gender = $_POST['gender'];
+    $top = $_POST['top'];
+    $topColor = $_POST['top_color'];
+    $pants = $_POST['pants'];
+    $pantsColor = $_POST['pants_color'];
+    $shoes = $_POST['shoes'];
+    $shoesColor = $_POST['shoes_color'];
+    $references = $_POST['references'];
+    $referencesColor = $_POST['references_color'];
 
-$topColor = $_POST['top_color'] ?? '';
-$pantsColor = $_POST['pants_color'] ?? '';
-$shoesColor = $_POST['shoes_color'] ?? '';
-$referencesColor = $_POST['references_color'] ?? '';
+    // ✅ Handle multiple image uploads
+    $imageNames = [];
 
-function imagePath($item, $gender, $color) {
-    $base = "assets/clothes/";
-    if (!$item) return null;
-    $path1 = "{$base}{$item}{$gender}_{$color}.png";
-    $path2 = "{$base}{$item}{$gender}.png";
-    return file_exists($path1) ? $path1 : (file_exists($path2) ? $path2 : null);
-}
+    if (!empty($_FILES['post_images']['name'][0])) {
+        $uploadDir = 'uploads/';
+        $allowed = ['jpg', 'jpeg', 'png', 'gif'];
 
-// Base image
-$basePath = "assets/" . ($gender === 'f' ? 'female_base.png' : 'male_base.png');
-$base = imagecreatefrompng($basePath);
-imagesavealpha($base, true);
+        foreach ($_FILES['post_images']['tmp_name'] as $index => $tmpName) {
+            $originalName = $_FILES['post_images']['name'][$index];
+            $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
 
-$width = imagesx($base);
-$height = imagesy($base);
+            if (in_array($extension, $allowed)) {
+                $uniqueName = uniqid('post_', true) . '.' . $extension;
+                $destination = $uploadDir . $uniqueName;
 
-$final = imagecreatetruecolor($width, $height);
-imagesavealpha($final, true);
-$transparent = imagecolorallocatealpha($final, 0, 0, 0, 127);
-imagefill($final, 0, 0, $transparent);
-imagecopy($final, $base, 0, 0, 0, 0, $width, $height);
-
-// Layer merge
-foreach ([imagePath($top, $gender, $topColor), imagePath($pants, $gender, $pantsColor), imagePath($shoes, $gender, $shoesColor), imagePath($references, $gender, $referencesColor)] as $layerPath) {
-    if ($layerPath && file_exists($layerPath)) {
-        $layer = imagecreatefrompng($layerPath);
-        imagesavealpha($layer, true);
-        imagecopy($final, $layer, 0, 0, 0, 0, $width, $height);
-        imagedestroy($layer);
+                if (move_uploaded_file($tmpName, $destination)) {
+                    $imageNames[] = $uniqueName;
+                }
+            }
+        }
     }
-}
 
-$filename = uniqid("outfit_") . ".png";
-imagepng($final, "uploads/" . $filename);
-imagedestroy($final);
+    $combinedImageNames = implode(',', $imageNames);
 
-$stmt = $pdo->prepare("INSERT INTO posts (
-    user_id, title, description, image, gender,
-    top, top_color, pants, pants_color,
-    shoes, shoes_color, reference_item, reference_color, created_at
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-
-$stmt->execute([
-    $user_id, $title, $description, $filename, $gender,
-    $top, $topColor, $pants, $pantsColor,
-    $shoes, $shoesColor, $references, $referencesColor
+    // ✅ Insert the post into the database
+    $stmt = $pdo->prepare("
+    INSERT INTO posts 
+    (user_id, title, description, gender, top, top_color, pants, pants_color, shoes, shoes_color, `references`, references_color, images) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+");
+  
+  $stmt->execute([
+    $user_id, $title, $description,
+    $gender, $top, $topColor,
+    $pants, $pantsColor,
+    $shoes, $shoesColor,
+    $references, $referencesColor,
+    $combinedImageNames
 ]);
 
-header("Location: profile.php");
-exit;
+  
+
+    // Redirect to user's profile or feed
+    header("Location: profile.php?id=" . $user_id);
+    exit;
+}
+?>

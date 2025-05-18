@@ -74,7 +74,7 @@ $users = $user_stmt->fetchAll();
         $refPath = imagePath($post['reference_item'], $suffix, $post['reference_color']);
       ?>
 
-      <a href="view.php?id=<?= $post['id']; ?>" class="post-link">
+      <a href="moreinfo.php?id=<?= $post['id']; ?>" class="post-link">
         <div class="post-card">
           <div class="post-header" style="text-align: center;">
             <span class="username">@<?= htmlspecialchars($post['username']) ?></span>

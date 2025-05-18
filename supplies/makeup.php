@@ -1,5 +1,5 @@
 <?php
-$page_title = "Prosthetics";
+$page_title = "Makeup";
 include("../includes/header.php");
 ?>
 <link rel="stylesheet" href="/css/supplies.css">

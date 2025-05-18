@@ -75,7 +75,7 @@
 
 .follow-button.following {
   background: #B3C8CF;
-  color: white;
+  color: #28393E;
 }
 
 /* ---------- Text Styling ---------- */
@@ -118,3 +118,19 @@
     margin-top: 10px;
   }
 }
+
+.edit-post-button {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.edit-post-button:hover {
+  background-color: #45a049;
+}
+
